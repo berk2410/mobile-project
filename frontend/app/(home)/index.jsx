@@ -17,19 +17,25 @@ export default function Page() {
             Hello,{" "}
             <Text style={styles.highlight}>{user?.firstName}</Text>
           </Text>
-          <TouchableOpacity
-            onPress={() => {
-              signOut();
-            }}
-          >
-            <Text style={styles.signOutText}>Çıkış</Text>
-          </TouchableOpacity>
+          
+
           <TouchableOpacity
             style={styles.button}
             onPress={() => router.push("/(tabs)/map")}
           >
             <Text style={styles.buttonText}>Go to Map</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity
+            style={styles.button} // Butonu aynı stil ile düzenledik
+            onPress={() => {
+              signOut();
+            }}
+          >
+            <Text style={styles.buttonText}>Log Out</Text>
+          </TouchableOpacity>
+
+
         </View>
       </SignedIn>
       <SignedOut>
@@ -62,10 +68,10 @@ const styles = StyleSheet.create({
   },
   containerHello: {
     flex: 1,
-    display:'flex',
+    display: 'flex',
     justifyContent: "center",
     alignItems: "center",
-    flexDirection:'column',
+    flexDirection: 'column',
     padding: 20,
     backgroundColor: "#f7f8fc",
   },
