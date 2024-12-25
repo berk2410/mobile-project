@@ -32,7 +32,7 @@ const Home = () => {
   );
 
   if (loading) {
-    return <ActivityIndicator size="large" color="#0000ff" style={styles.loadingIndicator} />;
+    return <ActivityIndicator size="large" color="#5D8A8E" style={styles.loadingIndicator} />;
   }
 
   if (error) {
@@ -59,60 +59,77 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: '#f7f8fc',
+    backgroundColor: '#F1F4F9', // A clean, light gray background
   },
   header: {
-    fontSize: 32,
+    fontSize: 36,
     fontWeight: 'bold',
-    color: '#2b2d42',
+    color: '#3A3A3A', // Dark gray for the header
     marginBottom: 20,
+    textAlign: 'center',
+    fontFamily: 'Roboto',
   },
   loadingIndicator: {
     marginTop: 20,
   },
   errorText: {
-    color: '#e63946',
+    color: '#E74C3C', // Bright red for error messages
     textAlign: 'center',
     marginTop: 20,
     fontSize: 18,
+    fontFamily: 'Roboto',
+    fontWeight: 'bold',
   },
   eventCard: {
-    backgroundColor: '#ffffff',
-    borderRadius: 8,
-    marginBottom: 16,
-    padding: 16,
-    shadowColor: '#000',
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
+    backgroundColor: '#FFFFFF', // Clean white card
+    borderRadius: 12,
+    marginBottom: 20,
+    padding: 18,
+    shadowColor: '#A1A8B1', // Soft shadow color for card depth
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: '#E0E4E8', // Light gray border for a clean look
   },
   eventTitle: {
-    fontSize: 20,
+    fontSize: 24,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#2C3E50', // Dark blue for title
     marginBottom: 8,
+    fontFamily: 'Roboto',
   },
   eventDetails: {
-    fontSize: 14,
-    color: '#666',
-    marginBottom: 4,
+    fontSize: 16,
+    color: '#7F8C8D', // Muted gray-blue for event details
+    marginBottom: 6,
+    fontFamily: 'Roboto',
   },
   eventDescription: {
     fontSize: 16,
-    color: '#444',
-    marginTop: 8,
+    color: '#4A4A4A', // Darker gray for description
+    marginTop: 12,
+    fontFamily: 'Roboto',
+    lineHeight: 24,
   },
   reloadButton: {
-    marginTop: 20,
-    padding: 15,
-    backgroundColor: '#2b2d42',
-    borderRadius: 8,
+    marginTop: 25,
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    backgroundColor: '#1F2A44', // Deep blue button
+    borderRadius: 25,
     alignItems: 'center',
+    shadowColor: '#1F2A44',
+    shadowOpacity: 0.2,
+    shadowRadius: 12,
+    elevation: 6,
   },
   reloadButtonText: {
-    fontSize: 16,
-    color: '#fff',
+    fontSize: 18,
+    color: '#FFFFFF',
     fontWeight: 'bold',
+    fontFamily: 'Roboto',
+    textTransform: 'uppercase',
   },
 });
 
