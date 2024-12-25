@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc -p tsconfig.json",
-    "start": "cross-env NODE_ENV=production node index.js",
+    "start": "nodemon index.js",
     "dev": "cross-env NODE_ENV=development nodemon ./api/index.js",
     "test": "cross-env NODE_ENV=test jest ts-node/register --verbose --runInBand --coverage tests/**"
   },
