@@ -47,7 +47,7 @@ export default function SignUpScreen() {
       const signUpAttempt = await signUp.attemptEmailAddressVerification({ code });
       if (signUpAttempt.status === 'complete') {
         await setActive({ session: signUpAttempt.createdSessionId });
-        router.replace('/');
+        router.replace('/(tabs)/map');
       } else {
         console.error(JSON.stringify(signUpAttempt, null, 2));
         setError('Verification failed. Please try again.');
