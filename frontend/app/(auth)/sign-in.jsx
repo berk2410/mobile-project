@@ -1,15 +1,21 @@
 import { useSignIn } from '@clerk/clerk-expo';
 import { Link, useRouter } from 'expo-router';
-import { Text, TextInput, Button, View, StyleSheet, TouchableOpacity } from 'react-native';
-import React from 'react';
+import { Text, TextInput, View, StyleSheet, TouchableOpacity, Image } from 'react-native';
+import React, { useCallback } from 'react';
+import { useOAuth } from '@clerk/clerk-expo';
+import * as Linking from 'expo-linking';
 
 export default function Page() {
   const { signIn, setActive, isLoaded } = useSignIn();
   const router = useRouter();
-
+  
   const [emailAddress, setEmailAddress] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
+
+  const { startOAuthFlow: startGoogleOAuthFlow } = useOAuth({ strategy: 'oauth_google' });
+  const { startOAuthFlow: startFacebookOAuthFlow } = useOAuth({ strategy: 'oauth_facebook' });
+  const { startOAuthFlow: startAppleOAuthFlow } = useOAuth({ strategy: 'oauth_apple' });
 
   const onSignInPress = React.useCallback(async () => {
     if (!isLoaded) return;
@@ -32,6 +38,26 @@ export default function Page() {
       setError('Invalid email or password. Please try again.');
     }
   }, [isLoaded, emailAddress, password]);
+
+  const onPressOAuth = useCallback(async (provider) => {
+    try {
+      const startOAuthFlow =
+        provider === 'google' ? startGoogleOAuthFlow :
+        provider === 'facebook' ? startFacebookOAuthFlow :
+        startAppleOAuthFlow;
+
+      const { createdSessionId } = await startOAuthFlow({
+        redirectUrl: Linking.createURL('/sign-in', { scheme: 'myapp' }),
+      });
+
+      if (createdSessionId) {
+        await setActive({ session: createdSessionId });
+        router.replace('/');
+      }
+    } catch (err) {
+      console.error('OAuth error', err);
+    }
+  }, [startGoogleOAuthFlow, startFacebookOAuthFlow, startAppleOAuthFlow]);
 
   const onForgotPasswordPress = () => {
     // Redirect to forgot password screen or flow
@@ -68,6 +94,22 @@ export default function Page() {
       {/* Forgot Password Button */}
       <TouchableOpacity onPress={onForgotPasswordPress}>
         <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
+      </TouchableOpacity>
+
+      {/* OAuth Buttons */}
+      <TouchableOpacity style={styles.oauthButton} onPress={() => onPressOAuth('google')}>
+        <Image style={styles.oauthLogo} source={require('../../assets/images/google-logo.png')} />
+        <Text style={styles.oauthText}>Sign in with Google</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.oauthButton} onPress={() => onPressOAuth('facebook')}>
+        <Image style={styles.oauthLogo} source={require('../../assets/images/facebook-logo.png')} />
+        <Text style={styles.oauthText}>Sign in with Facebook</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.oauthButton} onPress={() => onPressOAuth('apple')}>
+        <Image style={styles.oauthLogo} source={require('../../assets/images/apple-logo.png')} />
+        <Text style={styles.oauthText}>Sign in with Apple</Text>
       </TouchableOpacity>
 
       <View style={styles.footer}>
@@ -144,11 +186,31 @@ const styles = StyleSheet.create({
     color: '#2b2d42',
     fontWeight: 'bold',
   },
-  // Style for the forgot password text
   forgotPasswordText: {
     fontSize: 14,
     color: '#2b2d42',
     fontWeight: 'bold',
     marginTop: 10,
+  },
+  oauthButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    padding: 15,
+    marginTop: 15,
+    backgroundColor: '#f1f1f1',
+    borderRadius: 8,
+    borderColor: '#dcdcdc',
+    borderWidth: 1,
+  },
+  oauthLogo: {
+    width: 20,
+    height: 20,
+    marginRight: 10,
+  },
+  oauthText: {
+    fontSize: 16,
+    color: '#333',
   },
 });
