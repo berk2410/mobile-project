@@ -33,6 +33,11 @@ export default function Page() {
     }
   }, [isLoaded, emailAddress, password]);
 
+  const onForgotPasswordPress = () => {
+    // Redirect to forgot password screen or flow
+    router.navigate('/fpassword');
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.header}>Welcome Back!</Text>
@@ -58,6 +63,11 @@ export default function Page() {
       />
       <TouchableOpacity style={styles.button} onPress={onSignInPress}>
         <Text style={styles.buttonText}>Sign In</Text>
+      </TouchableOpacity>
+
+      {/* Forgot Password Button */}
+      <TouchableOpacity onPress={onForgotPasswordPress}>
+        <Text style={styles.forgotPasswordText}>Forgot your password?</Text>
       </TouchableOpacity>
 
       <View style={styles.footer}>
@@ -133,5 +143,12 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#2b2d42',
     fontWeight: 'bold',
+  },
+  // Style for the forgot password text
+  forgotPasswordText: {
+    fontSize: 14,
+    color: '#2b2d42',
+    fontWeight: 'bold',
+    marginTop: 10,
   },
 });
