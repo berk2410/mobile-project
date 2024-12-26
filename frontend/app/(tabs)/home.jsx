@@ -26,6 +26,7 @@ const Home = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [expandedEvents, setExpandedEvents] = useState({});
 
   useEffect(() => {
     // Fetch event data
@@ -51,21 +52,40 @@ const Home = () => {
     setFilteredEvents(newEvents);
   }, [filter, searchQuery, events]);
 
+  const toggleDetails = (id) => {
+    setExpandedEvents((prev) => ({
+      ...prev,
+      [id]: !prev[id],
+    }));
+  };
+
   const renderItem = ({ item }) => (
     <View style={styles.eventCard}>
       <Text style={styles.eventTitle}>{item.name || "No name available"}</Text>
-      <Text style={styles.eventDetails}>
-        Category: {item.category || "No category"}
-      </Text>
-      <Text style={styles.eventDetails}>
-        Start: {new Date(item.startDate).toLocaleString() || "No start date"}
-      </Text>
-      <Text style={styles.eventDetails}>
-        End: {new Date(item.endDate).toLocaleString() || "No end date"}
-      </Text>
-      <Text style={styles.eventDescription}>
-        {item.description || "No description available"}
-      </Text>
+      {expandedEvents[item._id] && (
+        <>
+          <Text style={styles.eventDetails}>
+            Category: {item.category || "No category"}
+          </Text>
+          <Text style={styles.eventDetails}>
+            Start: {new Date(item.startDate).toLocaleString() || "No start date"}
+          </Text>
+          <Text style={styles.eventDetails}>
+            End: {new Date(item.endDate).toLocaleString() || "No end date"}
+          </Text>
+          <Text style={styles.eventDescription}>
+            {item.description || "No description available"}
+          </Text>
+        </>
+      )}
+      <TouchableOpacity
+        style={styles.showDetailsButton}
+        onPress={() => toggleDetails(item._id)}
+      >
+        <Text style={styles.showDetailsText}>
+          {expandedEvents[item._id] ? "Hide Details" : "Show Details"}
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 
@@ -246,6 +266,24 @@ const styles = StyleSheet.create({
     fontFamily: "Roboto",
     fontWeight: "bold",
   },
+  showDetailsButton: {
+    backgroundColor: "#1F2A44",
+    marginTop: 10,
+    paddingVertical: 10,
+    borderRadius: 10,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+    elevation: 2,
+  },
+  showDetailsText: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "600",
+  },
 });
+
 
 export default Home;
