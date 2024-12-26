@@ -7,10 +7,12 @@ import {
   ActivityIndicator,
   TouchableOpacity,
   ScrollView,
+  Image,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// Filtreleme seçenekleri
 const filterData = [
   { id: "all", label: "All" },
   { id: "conference", label: "Conference" },
@@ -18,6 +20,22 @@ const filterData = [
   { id: "seminar", label: "Seminar" },
   { id: "meetup", label: "Meetup" },
 ];
+
+// Resim getirme fonksiyonu
+const getImageForCategory = (category) => {
+  switch (category) {
+    case "conference":
+      return require("../../assets/images/conference.png");
+    case "workshop":
+      return require("../../assets/images/workshop.png");
+    case "seminar":
+      return require("../../assets/images/seminar.png");
+    case "meetup":
+      return require("../../assets/images/meetup.png");
+    default:
+      return require("../../assets/images/default.png"); // Varsayılan resim
+  }
+};
 
 const Home = () => {
   const [events, setEvents] = useState([]);
@@ -29,7 +47,7 @@ const Home = () => {
   const [expandedEvents, setExpandedEvents] = useState({});
 
   useEffect(() => {
-    // Fetch event data
+    // Etkinlik verilerini çek
     axios
       .get("http://localhost:3001/event/get-all-events")
       .then((response) => {
@@ -61,6 +79,11 @@ const Home = () => {
 
   const renderItem = ({ item }) => (
     <View style={styles.eventCard}>
+      <Image
+        source={getImageForCategory(item.category)}
+        style={styles.eventImage}
+        resizeMode="cover"
+      />
       <Text style={styles.eventTitle}>{item.name || "No name available"}</Text>
       {expandedEvents[item._id] && (
         <>
@@ -116,9 +139,9 @@ const Home = () => {
         contentContainerStyle={styles.flatListContainer}
         ListHeaderComponent={
           <>
-            {/* Header title */}
+            {/* Başlık */}
             <Text style={styles.header}>Events</Text>
-            {/* Filter buttons */}
+            {/* Filtre butonları */}
             <ScrollView
               horizontal
               style={styles.filterContainer}
@@ -138,7 +161,7 @@ const Home = () => {
                 </TouchableOpacity>
               ))}
             </ScrollView>
-            {/* Search bar */}
+            {/* Arama çubuğu */}
             <TextInput
               style={styles.searchInput}
               placeholder="Search events by name or description..."
@@ -193,6 +216,13 @@ const styles = StyleSheet.create({
     elevation: 6,
     borderWidth: 1,
     borderColor: "#E0E4E8",
+  },
+  eventImage: {
+    width: "100%",
+    height: 70,
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+    marginBottom: 10,
   },
   eventTitle: {
     fontSize: 24,
@@ -284,6 +314,5 @@ const styles = StyleSheet.create({
     fontWeight: "600",
   },
 });
-
 
 export default Home;
