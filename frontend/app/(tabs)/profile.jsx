@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
   },
   value: {
     fontSize: 18,
-    color: '#191970',
+    color: '#2C3E50',
     fontWeight: 'bold',
   },
   button: {

@@ -204,7 +204,7 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
   },
   filterButton: {
-    backgroundColor: "#5D8A8E",
+    backgroundColor: "#1F2A44",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 15,
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   selectedButton: {
-    backgroundColor: "#1F2A44",
+    backgroundColor: "#5D8A8E",
     elevation: 6,
   },
   filterButtonText: {
