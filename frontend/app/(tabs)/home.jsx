@@ -2,7 +2,7 @@ import {
   View,
   Text,
   FlatList,
-  Button,
+  TextInput,
   StyleSheet,
   ActivityIndicator,
   TouchableOpacity,
@@ -21,17 +21,18 @@ const filterData = [
 
 const Home = () => {
   const [events, setEvents] = useState([]);
-  const [filteredEvents, setFilteredEvents] = useState([events]);
+  const [filteredEvents, setFilteredEvents] = useState([]);
   const [filter, setFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     // Fetch event data
     axios
-      .get("http://localhost:3001/event/get-all-events") // Replace localhost with your IP if needed
+      .get("http://localhost:3001/event/get-all-events")
       .then((response) => {
-        setEvents(response.data.events); // Use 'events' from the response
+        setEvents(response.data.events);
         setLoading(false);
       })
       .catch((err) => {
@@ -43,10 +44,12 @@ const Home = () => {
 
   useEffect(() => {
     const newEvents = events.filter((event) =>
-      filter === "all" ? event : event.category === filter
+      (filter === "all" ? true : event.category === filter) &&
+      (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        event.description.toLowerCase().includes(searchQuery.toLowerCase()))
     );
     setFilteredEvents(newEvents);
-  }, [filter, events]);
+  }, [filter, searchQuery, events]);
 
   const renderItem = ({ item }) => (
     <View style={styles.eventCard}>
@@ -86,32 +89,49 @@ const Home = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Upcoming Events</Text>
-      {/* Wrapping the buttons in a ScrollView with no scrollbar */}
-      <ScrollView
-        horizontal
-        style={styles.filterContainer}
-        showsHorizontalScrollIndicator={false} // Hide the horizontal scrollbar
-        contentContainerStyle={styles.filterContent}
-      >
-        {filterData.map((data) => (
-          <TouchableOpacity
-            key={data.id}
-            style={[
-              styles.filterButton,
-              filter === data.id ? styles.selectedButton : null, // Highlight selected button
-            ]}
-            onPress={() => setFilter(data.id)}
-          >
-            <Text style={styles.filterButtonText}>{data.label}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
       <FlatList
         data={filteredEvents}
         renderItem={renderItem}
-        keyExtractor={(item) => item._id} // Use the unique _id field
-        contentContainerStyle={styles.flatListContainer} // Add spacing to the list
+        keyExtractor={(item) => item._id}
+        contentContainerStyle={styles.flatListContainer}
+        ListHeaderComponent={
+          <>
+            {/* Header title */}
+            <Text style={styles.header}>Events</Text>
+            {/* Filter buttons */}
+            <ScrollView
+              horizontal
+              style={styles.filterContainer}
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.filterContent}
+            >
+              {filterData.map((data) => (
+                <TouchableOpacity
+                  key={data.id}
+                  style={[
+                    styles.filterButton,
+                    filter === data.id ? styles.selectedButton : null,
+                  ]}
+                  onPress={() => setFilter(data.id)}
+                >
+                  <Text style={styles.filterButtonText}>{data.label}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+            {/* Search bar */}
+            <TextInput
+              style={styles.searchInput}
+              placeholder="Search events by name or description..."
+              value={searchQuery}
+              onChangeText={(text) => setSearchQuery(text)}
+            />
+          </>
+        }
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <Text style={styles.emptyText}>No events found.</Text>
+          </View>
+        }
       />
     </View>
   );
@@ -121,12 +141,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: "#F1F4F9", // A clean, light gray background
+    backgroundColor: "#F1F4F9",
   },
   header: {
     fontSize: 36,
     fontWeight: "bold",
-    color: "#3A3A3A", // Dark gray for the header
+    color: "#3A3A3A",
     marginBottom: 20,
     textAlign: "center",
     fontFamily: "Roboto",
@@ -135,7 +155,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
   },
   errorText: {
-    color: "#E74C3C", // Bright red for error messages
+    color: "#E74C3C",
     textAlign: "center",
     marginTop: 20,
     fontSize: 18,
@@ -143,33 +163,33 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   eventCard: {
-    backgroundColor: "#FFFFFF", // Clean white card
+    backgroundColor: "#FFFFFF",
     borderRadius: 12,
     marginBottom: 20,
     padding: 18,
-    shadowColor: "#A1A8B1", // Soft shadow color for card depth
+    shadowColor: "#A1A8B1",
     shadowOpacity: 0.15,
     shadowRadius: 12,
     elevation: 6,
     borderWidth: 1,
-    borderColor: "#E0E4E8", // Light gray border for a clean look
+    borderColor: "#E0E4E8",
   },
   eventTitle: {
     fontSize: 24,
     fontWeight: "bold",
-    color: "#2C3E50", // Dark blue for title
+    color: "#2C3E50",
     marginBottom: 8,
     fontFamily: "Roboto",
   },
   eventDetails: {
     fontSize: 16,
-    color: "#7F8C8D", // Muted gray-blue for event details
+    color: "#7F8C8D",
     marginBottom: 6,
     fontFamily: "Roboto",
   },
   eventDescription: {
     fontSize: 16,
-    color: "#4A4A4A", // Darker gray for description
+    color: "#4A4A4A",
     marginTop: 12,
     fontFamily: "Roboto",
     lineHeight: 24,
@@ -178,7 +198,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginBottom: 20,
     paddingHorizontal: 5,
-    paddingBottom: 15, // Add padding bottom to avoid touching the next section
+    paddingBottom: 15,
   },
   filterContent: {
     paddingVertical: 10,
@@ -189,22 +209,42 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 15,
     marginHorizontal: 5,
-    elevation: 4, // Button shadow effect
+    elevation: 4,
     height: 45,
     justifyContent: "center",
     alignItems: "center",
   },
   selectedButton: {
-    backgroundColor: "#1F2A44", // Dark blue for selected button
-    elevation: 6, // Stronger shadow for selected button
+    backgroundColor: "#1F2A44",
+    elevation: 6,
   },
   filterButtonText: {
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "bold",
   },
+  searchInput: {
+    height: 45,
+    borderColor: "#D0D3D4",
+    borderWidth: 1,
+    borderRadius: 10,
+    paddingHorizontal: 15,
+    fontSize: 16,
+    backgroundColor: "#FFFFFF",
+    marginBottom: 20,
+  },
   flatListContainer: {
-    paddingBottom: 20, // Ensure the events list has some space at the bottom
+    paddingBottom: 20,
+  },
+  emptyContainer: {
+    marginTop: 20,
+    alignItems: "center",
+  },
+  emptyText: {
+    fontSize: 18,
+    color: "#7F8C8D",
+    fontFamily: "Roboto",
+    fontWeight: "bold",
   },
 });
 
