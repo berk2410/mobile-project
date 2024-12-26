@@ -154,17 +154,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f7f8fc',
+    backgroundColor: '#F1F4F9', // Light background color
   },
   header: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#2b2d42',
+    color: '#1F2A44', // Dark color for header
     marginBottom: 10,
   },
   subheader: {
     fontSize: 18,
-    color: '#8d99ae',
+    color: '#5D8A8E', // Muted color for subheader
     marginBottom: 30,
     textAlign: 'center',
   },
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
     marginTop: 20,
-    backgroundColor: '#2b2d42',
+    backgroundColor: '#1F2A44', // Dark button color
     borderRadius: 8,
     alignItems: 'center',
   },
@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
     marginTop: 15,
-    backgroundColor: '#f1f1f1',
+    backgroundColor: '#F1F4F9', // Light background for OAuth buttons
     borderRadius: 8,
     borderColor: '#dcdcdc',
     borderWidth: 1,
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     color: '#333',
   },
   errorText: {
-    color: '#e63946',
+    color: '#e63946', // Red color for error messages
     marginBottom: 15,
     textAlign: 'center',
   },

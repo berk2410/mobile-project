@@ -181,25 +181,25 @@ const styles = StyleSheet.create({
   button: {
     padding: 15,
     marginTop: 20,
-    backgroundColor: '#2b2d42',
+    backgroundColor: '#1f2a44', // Adjusted to match your color scheme
     borderRadius: 8,
     alignItems: 'center',
+    width: 300,
   },
   buttonText: {
     fontSize: 16,
     color: '#fff',
     fontWeight: 'bold',
-    width: 300,
-    textAlign: "center", // Yatayda ortalama
+    textAlign: 'center',
   },
   input: {
     borderWidth: 1,
-    borderColor: '#ccc',
+    borderColor: '#D0D3D4',
     borderRadius: 8,
     padding: 10,
     fontSize: 16,
     marginBottom: 10,
-    backgroundColor: '#fff',
+    backgroundColor: '#FFFFFF',
   },
 });
 

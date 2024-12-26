@@ -128,17 +128,17 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
-    backgroundColor: '#f7f8fc',
+    backgroundColor: '#F1F4F9', // Updated background color to match design
   },
   header: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#2b2d42',
+    color: '#2b2d42', // Matching your header color
     marginBottom: 10,
   },
   subheader: {
     fontSize: 18,
-    color: '#8d99ae',
+    color: '#8d99ae', // Soft color for subheader
     marginBottom: 30,
   },
   input: {
@@ -156,17 +156,17 @@ const styles = StyleSheet.create({
     width: '100%',
     padding: 15,
     marginTop: 20,
-    backgroundColor: '#2b2d42',
+    backgroundColor: '#1f2a44', // Updated button color
     borderRadius: 8,
     alignItems: 'center',
   },
   buttonText: {
     fontSize: 16,
-    color: '#fff',
+    color: '#fff', // White text on button
     fontWeight: 'bold',
   },
   errorText: {
-    color: '#e63946',
+    color: '#e63946', // Red color for error
     marginBottom: 15,
   },
   footer: {
@@ -183,12 +183,12 @@ const styles = StyleSheet.create({
   },
   linkText: {
     fontSize: 14,
-    color: '#2b2d42',
+    color: '#2b2d42', // Consistent link color
     fontWeight: 'bold',
   },
   forgotPasswordText: {
     fontSize: 14,
-    color: '#2b2d42',
+    color: '#1F2A44', // Same as link and sign-in button
     fontWeight: 'bold',
     marginTop: 10,
   },

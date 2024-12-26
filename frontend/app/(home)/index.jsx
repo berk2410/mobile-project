@@ -11,13 +11,12 @@ export default function Page() {
   return (
     <View style={styles.container}>
       <SignedIn>
-        <View style={styles.containerHello}> 
+        <View style={styles.containerHello}>
           <Text style={styles.header}>Welcome!</Text>
           <Text style={styles.subheader}>
             Hello,{" "}
             <Text style={styles.highlight}>{user?.firstName}</Text>
           </Text>
-          
 
           <TouchableOpacity
             style={styles.button}
@@ -27,15 +26,13 @@ export default function Page() {
           </TouchableOpacity>
 
           <TouchableOpacity
-            style={styles.button} // Butonu aynı stil ile düzenledik
+            style={styles.button} // Styled similarly
             onPress={() => {
               signOut();
             }}
           >
             <Text style={styles.buttonText}>Log Out</Text>
           </TouchableOpacity>
-
-
         </View>
       </SignedIn>
       <SignedOut>
@@ -64,7 +61,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
-    backgroundColor: "#f7f8fc",
+    backgroundColor: "#F1F4F9", // Updated background to match your color scheme
   },
   containerHello: {
     flex: 1,
@@ -73,35 +70,35 @@ const styles = StyleSheet.create({
     alignItems: "center",
     flexDirection: 'column',
     padding: 20,
-    backgroundColor: "#f7f8fc",
+    backgroundColor: "#F1F4F9", // Consistent background color
   },
   header: {
     fontSize: 32,
     fontWeight: "bold",
-    color: "#2b2d42",
+    color: "#2b2d42", // Color to match your design
     marginBottom: 10,
   },
   subheader: {
     fontSize: 18,
-    color: "#8d99ae",
+    color: "#8d99ae", // Soft text color
     marginBottom: 30,
     textAlign: "center",
   },
   highlight: {
-    color: "#2b2d42",
+    color: "#2b2d42", // Highlight color matches the header
     fontWeight: "bold",
   },
   button: {
-    width: "270",
+    width: 270, // Fixed width for consistency
     padding: 15,
     marginVertical: 10,
-    backgroundColor: "#2b2d42",
+    backgroundColor: "#1f2a44", // Button color adjusted to match your scheme
     borderRadius: 8,
     alignItems: "center",
   },
   buttonText: {
     fontSize: 16,
-    color: "#fff",
+    color: "#fff", // White text on button
     fontWeight: "bold",
   },
   link: {
@@ -110,7 +107,7 @@ const styles = StyleSheet.create({
   },
   signOutText: {
     fontSize: 18,
-    color: "#2b2d42",
+    color: "#2b2d42", // Matching sign out text color
     fontWeight: "bold",
     marginTop: 10,
   },
