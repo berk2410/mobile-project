@@ -15,7 +15,6 @@ import axios from "axios";
 import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
 import { useUser } from "@clerk/clerk-expo";
 
-// Filtreleme seçenekleri
 const filterData = [
   { id: "all", label: "All" },
   { id: "conference", label: "Conference" },
@@ -24,7 +23,6 @@ const filterData = [
   { id: "meetup", label: "Meetup" },
 ];
 
-// Resim getirme fonksiyonu
 const getImageForCategory = (category) => {
   switch (category) {
     case "conference":
@@ -36,7 +34,7 @@ const getImageForCategory = (category) => {
     case "meetup":
       return require("../../assets/images/meetup.png");
     default:
-      return require("../../assets/images/default.png"); // Varsayılan resim
+      return require("../../assets/images/default.png");
   }
 };
 
@@ -49,9 +47,13 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [expandedEvents, setExpandedEvents] = useState({});
   const { user } = useUser();
+  const [favorites, setFavorites] = useState([]);
 
   useEffect(() => {
-    // Etkinlik verilerini çek
+    user.update({ unsafeMetadata: { favorites: favorites } });
+  }, [favorites])
+
+  useEffect(() => {
     axios
       .get("http://localhost:3001/event/get-all-events")
       .then((response) => {
@@ -63,6 +65,8 @@ const Home = () => {
         setError("An error occurred while fetching events.");
         setLoading(false);
       });
+    
+    setFavorites(user?.unsafeMetadata?.favorites);
   }, []);
 
   useEffect(() => {
@@ -80,6 +84,15 @@ const Home = () => {
       ...prev,
       [id]: !prev[id],
     }));
+  };
+
+  const handleLike = (id) => {
+    if (favorites.includes(id)) {
+      const filteredFavorites = favorites.filter((item) => item !== id)
+      setFavorites(filteredFavorites)
+    } else {
+      setFavorites((prev) => [...prev, id])
+    }
   };
 
   const renderItem = ({ item }) => (
@@ -116,8 +129,8 @@ const Home = () => {
             {expandedEvents[item._id] ? "Hide Details" : "Show Details"}
           </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.favoriteButton}>
-          {user.favorites?.includes(item.id) ? (
+        <TouchableOpacity onPress={()=>handleLike(item._id)} style={styles.favoriteButton}>
+          {user?.unsafeMetadata?.favorites?.includes(item._id) ? (
             <FontAwesome
               name="heart"
               color="#D22B2B"
