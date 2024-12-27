@@ -17,6 +17,7 @@ import { useUser } from "@clerk/clerk-expo";
 
 const filterData = [
   { id: "all", label: "All" },
+  { id: "favorites", label: "Favorites"},
   { id: "conference", label: "Conference" },
   { id: "workshop", label: "Workshop" },
   { id: "seminar", label: "Seminar" },
@@ -47,7 +48,7 @@ const Home = () => {
   const [error, setError] = useState(null);
   const [expandedEvents, setExpandedEvents] = useState({});
   const { user } = useUser();
-  const [favorites, setFavorites] = useState([]);
+  const [favorites, setFavorites] = useState(user?.unsafeMetadata?.favorites);
 
   useEffect(() => {
     user.update({ unsafeMetadata: { favorites: favorites } });
@@ -70,13 +71,18 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
+    if (filter === "favorites") {
+      const favEvents = events.filter((event) => favorites.includes(event._id))
+      setFilteredEvents(favEvents)
+    } else {
     const newEvents = events.filter(
       (event) =>
         (filter === "all" ? true : event.category === filter) &&
         (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
           event.description.toLowerCase().includes(searchQuery.toLowerCase()))
     );
-    setFilteredEvents(newEvents);
+      setFilteredEvents(newEvents);
+    }      
   }, [filter, searchQuery, events]);
 
   const toggleDetails = (id) => {
