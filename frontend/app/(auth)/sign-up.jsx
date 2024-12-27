@@ -31,7 +31,7 @@ export default function SignUpScreen() {
     if (!isLoaded) return;
 
     try {
-      await signUp.create({ emailAddress, password });
+      await signUp.create({ emailAddress, password, unsafeMetadata:{favorites:[]} });
       await signUp.prepareEmailAddressVerification({ strategy: 'email_code' });
       setPendingVerification(true);
     } catch (err) {
