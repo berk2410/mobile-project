@@ -8,9 +8,12 @@ import {
   TouchableOpacity,
   ScrollView,
   Image,
+  Button,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { FontAwesome5, FontAwesome } from "@expo/vector-icons";
+import { useUser } from "@clerk/clerk-expo";
 
 // Filtreleme seçenekleri
 const filterData = [
@@ -45,6 +48,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [expandedEvents, setExpandedEvents] = useState({});
+  const { user } = useUser();
 
   useEffect(() => {
     // Etkinlik verilerini çek
@@ -62,10 +66,11 @@ const Home = () => {
   }, []);
 
   useEffect(() => {
-    const newEvents = events.filter((event) =>
-      (filter === "all" ? true : event.category === filter) &&
-      (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        event.description.toLowerCase().includes(searchQuery.toLowerCase()))
+    const newEvents = events.filter(
+      (event) =>
+        (filter === "all" ? true : event.category === filter) &&
+        (event.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          event.description.toLowerCase().includes(searchQuery.toLowerCase()))
     );
     setFilteredEvents(newEvents);
   }, [filter, searchQuery, events]);
@@ -91,7 +96,8 @@ const Home = () => {
             Category: {item.category || "No category"}
           </Text>
           <Text style={styles.eventDetails}>
-            Start: {new Date(item.startDate).toLocaleString() || "No start date"}
+            Start:{" "}
+            {new Date(item.startDate).toLocaleString() || "No start date"}
           </Text>
           <Text style={styles.eventDetails}>
             End: {new Date(item.endDate).toLocaleString() || "No end date"}
@@ -101,14 +107,31 @@ const Home = () => {
           </Text>
         </>
       )}
-      <TouchableOpacity
-        style={styles.showDetailsButton}
-        onPress={() => toggleDetails(item._id)}
-      >
-        <Text style={styles.showDetailsText}>
-          {expandedEvents[item._id] ? "Hide Details" : "Show Details"}
-        </Text>
-      </TouchableOpacity>
+      <View style={styles.cardActionContainer}>
+        <TouchableOpacity
+          style={styles.showDetailsButton}
+          onPress={() => toggleDetails(item._id)}
+        >
+          <Text style={styles.showDetailsText}>
+            {expandedEvents[item._id] ? "Hide Details" : "Show Details"}
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.favoriteButton}>
+          {user.favorites?.includes(item.id) ? (
+            <FontAwesome
+              name="heart"
+              color="#D22B2B"
+              style={styles.favoriteIcon}
+            />
+          ) : (
+            <FontAwesome5
+              name="heart"
+              color="#D22B2B"
+              style={styles.favoriteIcon}
+            />
+          )}
+        </TouchableOpacity>
+      </View>
     </View>
   );
 
@@ -298,7 +321,7 @@ const styles = StyleSheet.create({
   },
   showDetailsButton: {
     backgroundColor: "#1F2A44",
-    marginTop: 10,
+    flex: 1,
     paddingVertical: 10,
     borderRadius: 10,
     alignItems: "center",
@@ -312,6 +335,23 @@ const styles = StyleSheet.create({
     color: "#FFFFFF",
     fontSize: 16,
     fontWeight: "600",
+  },
+  cardActionContainer: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 10,
+    marginTop: 10,
+  },
+  favoriteButton: {
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    width: 40,
+    height: 40,
+  },
+  favoriteIcon: {
+    fontSize: 25,
   },
 });
 
